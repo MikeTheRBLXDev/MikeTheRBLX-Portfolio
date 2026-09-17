@@ -109,3 +109,21 @@ footer{max-width:var(--max);margin:auto;border:1px solid var(--line);border-bott
   .contact-panel>div:first-child{padding:38px 25px}.contact-links a{padding:20px}.contact-links a:hover{padding-left:20px}
   footer{padding:20px;gap:12px;flex-wrap:wrap}
 }
+
+/* Custom lightweight cursor — CSS-only, so it adds no network request. */
+@media (pointer:fine){
+  body{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M5 3l20 13-9 2 5 9-4 2-5-10-7 6z' fill='%2306070d' stroke='%231688ff' stroke-width='1.6' stroke-linejoin='round'/%3E%3Cpath d='M9 8l12 8-6 1-4-7z' fill='%2313c7ff' opacity='.9'/%3E%3C/svg%3E") 5 3, auto}
+  a,button,[role="button"],.portfolio-card{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M5 3l20 13-9 2 5 9-4 2-5-10-7 6z' fill='%2306070d' stroke='%2313c7ff' stroke-width='1.7' stroke-linejoin='round'/%3E%3C/svg%3E") 5 3, pointer}
+}
+.page-top{padding-top:100px;min-height:calc(100vh - 76px)}
+.page-title{font-size:clamp(54px,7vw,88px);line-height:.94;letter-spacing:-.07em;margin:0}
+.service-grid{display:grid;grid-template-columns:repeat(2,1fr);border:1px solid var(--line);background:var(--line);gap:1px}
+.service-grid a{background:var(--panel);padding:30px;min-height:175px;display:flex;flex-direction:column;transition:.2s}
+.service-grid a:hover{background:var(--panel-2);transform:translateY(-2px)}
+.service-grid span{color:var(--blue);font-size:9px;letter-spacing:.18em;font-weight:800}
+.service-grid strong{font-size:24px;margin-top:auto;letter-spacing:-.04em}
+.service-grid em{font-style:normal;color:var(--muted);font-size:11px;margin-top:3px}
+@media(max-width:620px){
+  .service-grid{grid-template-columns:1fr}
+  .page-top{padding-top:65px}
+}

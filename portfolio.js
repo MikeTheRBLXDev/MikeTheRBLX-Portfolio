@@ -101,6 +101,7 @@ tabs.forEach(tab => tab.addEventListener("click", () => {
   tabs.forEach(t => t.classList.remove("active"));
   tab.classList.add("active");
   state.category = tab.dataset.category;
+  history.replaceState(null, "", `#${state.category}`);
   render();
 }));
 

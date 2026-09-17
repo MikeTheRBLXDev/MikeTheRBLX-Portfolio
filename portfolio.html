@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05070d">
+  <link rel="icon" href="assets/branding/logo.webp">
+  <link rel="stylesheet" href="styles.css">
+  <title>MikeTheRBLXDev — Portfolio</title>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="MikeTheRBLXDev home">
+      <img src="assets/branding/logo.webp" alt="" class="brand-mark">
+      <span class="brand-name">MikeThe<span>RBLXDev</span></span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html" data-nav="about">About me</a>
+      <a href="tos.html" data-nav="tos">ToS</a>
+      <a href="portfolio.html" data-nav="portfolio">Portfolio</a>
+      <a href="contact.html" data-nav="contact">Contact</a>
+    </nav>
+    <div class="header-status"><span class="status-dot"></span><span>AVAILABLE FOR WORK</span></div>
+  </header>
+  <main>
+    <section class="section portfolio-section page-top" id="portfolio">
+      <div class="section-heading portfolio-heading">
+        <div>
+          <p class="eyebrow"><span>03</span> SELECTED WORK</p>
+          <h1 class="page-title">The work<br><span>speaks for itself.</span></h1>
+        </div>
+        <p class="section-intro">Drop your files into the matching portfolio folder on GitHub. No renaming and no code edits required.</p>
+      </div>
+      <div class="portfolio-tabs" role="tablist" aria-label="Portfolio categories">
+        <button class="portfolio-tab active" data-category="scripting" role="tab">Scripting</button>
+        <button class="portfolio-tab" data-category="modeling" role="tab">Modeling</button>
+        <button class="portfolio-tab" data-category="ui" role="tab">UI</button>
+        <button class="portfolio-tab" data-category="building" role="tab">Building</button>
+      </div>
+      <div id="portfolio-grid" class="portfolio-grid" aria-live="polite"></div>
+      <div id="portfolio-empty" class="portfolio-empty" hidden>
+        <div class="empty-icon">&lt;/&gt;</div>
+        <h3>No work uploaded yet.</h3>
+        <p>Put images or supported videos into the selected portfolio folder and push the files to GitHub. The site will discover them automatically.</p>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <span>MIKETHERBLXDEV</span>
+    <span>ROBLOX DEVELOPER · 4+ YEARS</span>
+    <span>© <span id="year"></span></span>
+  </footer>
+  <div class="media-modal" id="media-modal" aria-hidden="true">
+    <button class="modal-close" id="modal-close" aria-label="Close preview">×</button>
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-content" id="modal-content"></div>
+  </div>
+  <script src="portfolio.js" defer></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.querySelector('[data-nav="portfolio"]').classList.add("active");
+    const hash = location.hash.replace("#","");
+    if (["scripting","modeling","ui","building"].includes(hash)) {
+      setTimeout(() => document.querySelector(`[data-category="${hash}"]`)?.click(), 0);
+    }
+  </script>
+</body>
+</html>

@@ -1,6 +1,10 @@
 {
   "scripting": [],
-  "modeling": [],
+  "modeling": [
+    {
+      "path": "portfolio/modeling/GymEquipmentImage.png"
+    }
+  ],
   "ui": [],
   "building": []
 }

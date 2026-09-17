@@ -1,0 +1,55 @@
+name: Update portfolio
+
+on:
+  push:
+    paths:
+      - "portfolio/**"
+      - ".github/workflows/generate-manifest.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate portfolio manifest
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          categories = ["scripting", "modeling", "ui", "building"]
+          supported = {
+              ".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".avif",
+              ".mp4", ".webm", ".ogg", ".mov", ".m4v"
+          }
+
+          manifest = {}
+          for category in categories:
+              folder = Path("portfolio") / category
+              files = []
+              if folder.exists():
+                  for path in sorted(folder.rglob("*")):
+                      if path.is_file() and path.suffix.lower() in supported:
+                          files.append({"path": path.as_posix()})
+              manifest[category] = files
+
+          Path("portfolio.json").write_text(
+              json.dumps(manifest, indent=2),
+              encoding="utf-8"
+          )
+          PY
+
+      - name: Commit manifest
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add portfolio.json
+          git diff --cached --quiet || git commit -m "chore: update portfolio manifest"
+          git push

@@ -30,14 +30,26 @@ jobs:
               ".mp4", ".webm", ".ogg", ".mov", ".m4v"
           }
 
+          import re
+
           manifest = {}
+          youtube_pattern = re.compile(r"(?:https?://)?(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/shorts/)([A-Za-z0-9_-]{6,})")
+
           for category in categories:
               folder = Path("portfolio") / category
               files = []
               if folder.exists():
                   for path in sorted(folder.rglob("*")):
-                      if path.is_file() and path.suffix.lower() in supported:
-                          files.append({"path": path.as_posix()})
+                      if not path.is_file():
+                          continue
+                      if path.suffix.lower() in supported:
+                          files.append({"type": "media", "path": path.as_posix()})
+                      elif path.name.lower() in {"youtube.txt", "youtube-links.txt"}:
+                          for line in path.read_text(encoding="utf-8", errors="ignore").splitlines():
+                              url = line.strip()
+                              match = youtube_pattern.search(url)
+                              if match:
+                                  files.append({"type":"youtube", "id":match.group(1), "url":url})
               manifest[category] = files
 
           Path("portfolio.json").write_text(

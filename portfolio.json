@@ -2,6 +2,7 @@
   "scripting": [],
   "modeling": [
     {
+      "type": "media",
       "path": "portfolio/modeling/GymEquipmentImage.png"
     }
   ],

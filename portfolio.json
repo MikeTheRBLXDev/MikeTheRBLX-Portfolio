@@ -9,15 +9,7 @@
   "modeling": [
     {
       "type": "media",
-      "path": "portfolio/modeling/Bike.jpeg"
-    },
-    {
-      "type": "media",
       "path": "portfolio/modeling/GymEquipmentImage.png"
-    },
-    {
-      "type": "media",
-      "path": "portfolio/modeling/Treasure.jpeg"
     }
   ],
   "ui": [],

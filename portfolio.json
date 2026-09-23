@@ -18,6 +18,10 @@
     },
     {
       "type": "media",
+      "path": "portfolio/modeling/Chest.png"
+    },
+    {
+      "type": "media",
       "path": "portfolio/modeling/GymEquipmentImage.png"
     }
   ],

@@ -38,6 +38,10 @@
   "ui": [
     {
       "type": "media",
+      "path": "portfolio/ui/ProfileOverviewUI.png"
+    },
+    {
+      "type": "media",
       "path": "portfolio/ui/SimulatorHudUI.png"
     }
   ],

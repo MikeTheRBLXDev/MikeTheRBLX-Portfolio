@@ -35,6 +35,11 @@
       "path": "portfolio/modeling/GymEquipmentImage.png"
     }
   ],
-  "ui": [],
+  "ui": [
+    {
+      "type": "media",
+      "path": "portfolio/ui/SimulatorHudUI.png"
+    }
+  ],
   "building": []
 }

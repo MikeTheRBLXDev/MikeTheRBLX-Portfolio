@@ -49,7 +49,7 @@
   "ui": [
     {
       "type": "media",
-      "path": "portfolio/ui/HUD.jpg",
+      "path": "assets/UI/HUD.jpg",
       "title": "Game HUD",
       "description": "A game HUD with navigation, a shop, play, and class selection.",
       "slug": "game-hud",
@@ -57,7 +57,7 @@
     },
     {
       "type": "media",
-      "path": "portfolio/ui/ProfileOverviewUI.png",
+      "path": "assets/UI/ProfileOverviewUI.png",
       "title": "Profile Overview UI",
       "description": "A player profile interface with level progress, titles, and banners.",
       "slug": "profile-overview",
@@ -65,7 +65,7 @@
     },
     {
       "type": "media",
-      "path": "portfolio/ui/SimulatorHudUI.png",
+      "path": "assets/UI/SimulatorHudUI.png",
       "title": "Simulator HUD",
       "description": "A simulator HUD with currencies, pets, rebirths, codes, and level progress.",
       "slug": "simulator-hud",

@@ -1,5 +1,7 @@
 (() => {
   const categories = ['scripting', 'ui'];
+  const folders = {scripting: 'Scripting', ui: 'UI'};
+  const assetURL = path => path.split('/').map(encodeURIComponent).join('/');
   const state = {category: 'scripting', manifest: {}, ready: false, item: null, opener: null};
   const grid = document.getElementById('portfolio-grid');
   const featured = document.getElementById('portfolio-featured');
@@ -54,7 +56,7 @@
       link.append(play);
     } else if (videoExt.test(item.path)) {
       media = element('video', 'portfolio-media');
-      media.src = item.path;
+      media.src = assetURL(item.path);
       media.muted = true;
       media.playsInline = true;
       media.preload = 'metadata';
@@ -63,7 +65,7 @@
       link.append(play);
     } else {
       media = element('img', 'portfolio-media');
-      media.src = item.path;
+      media.src = assetURL(item.path);
     }
     if (media.tagName === 'IMG') {
       media.alt = item.title;
@@ -135,14 +137,14 @@
       media.referrerPolicy = 'strict-origin-when-cross-origin';
     } else if (videoExt.test(item.path)) {
       media = document.createElement('video');
-      media.src = item.path;
+      media.src = assetURL(item.path);
       media.controls = true;
       media.autoplay = true;
       media.playsInline = true;
       media.setAttribute('aria-label', item.title);
     } else {
       media = document.createElement('img');
-      media.src = item.path;
+      media.src = assetURL(item.path);
       media.alt = item.title;
     }
     modalContent.append(media);
@@ -216,7 +218,7 @@
         const usedSlugs = new Set();
         state.manifest[category] = (Array.isArray(data[category]) ? data[category] : []).filter(item =>
           item.type === 'youtube' ? /^[A-Za-z0-9_-]{11}$/.test(item.id) :
-          item.type === 'media' && typeof item.path === 'string' && item.path.startsWith(`portfolio/${category}/`) && (imageExt.test(item.path) || videoExt.test(item.path))
+          item.type === 'media' && typeof item.path === 'string' && item.path.startsWith(`assets/${folders[category]}/`) && !item.path.split('/').some(part => part === '..' || part === '.') && (imageExt.test(item.path) || videoExt.test(item.path))
         ).map(item => {
           const fallback = (item.path?.split('/').pop() || 'Roblox demo').replace(/\.[^.]+$/, '').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/[_-]+/g, ' ');
           const title = item.title || fallback;

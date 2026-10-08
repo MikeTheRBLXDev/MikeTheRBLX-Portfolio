@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05070d">
+  <meta name="description" content="Roblox scripting and UI/UX design services by MikeTheRBLXDev. Gameplay systems, complex systems, and game-ready interfaces.">
+  <title>MikeTheRBLXDev — Roblox Developer</title>
+  <link rel="icon" href="assets/branding/logo.webp">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="MikeTheRBLXDev home">
+      <img src="assets/branding/logo.webp" alt="" class="brand-mark">
+      <span class="brand-name">MikeThe<span>RBLXDev</span></span>
+    </a>
+
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="index.html" data-nav="about">About me</a>
+      <a href="tos.html" data-nav="tos">ToS</a>
+      <a href="portfolio.html" data-nav="portfolio">Portfolio</a>
+      <a href="contact.html" data-nav="contact" class="nav-contact">Contact</a>
+    </nav>
+
+    <div class="header-status">
+      <span class="status-dot"></span>
+      <span>AVAILABLE FOR WORK</span>
+    </div>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section class="hero" id="about">
+      <div class="hero-art" aria-hidden="true">
+        <img src="assets/branding/logo.webp" alt="">
+      </div>
+      <div class="hero-content">
+        <p class="eyebrow"><span>01</span> DEVELOPER PROFILE</p>
+        <h1 class="services-title">Scripting and<br><span>UI/UX Design Services</span></h1>
+        <p class="hero-copy">Hey there, I am Mike, a Roblox developer with 4 years of experience on the platform. I can make gameplay systems and complex systems, as well as UI and UX to help your game get more attention through its UI.</p>
+        <div class="skill-row" aria-label="Skills">
+          <span>SCRIPTING</span><i aria-hidden="true"></i><span>UI/UX DESIGN</span>
+        </div>
+        <div class="hero-actions">
+          <a class="button button-primary" href="contact.html">Discuss a project <span aria-hidden="true">↗</span></a>
+          <a class="hero-cta" href="portfolio.html">Explore my work <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <div class="hero-side-note">ROBLOX<br>DEVELOPER<br><span>MIKE</span></div>
+    </section>
+
+    <section class="section about-extra">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow"><span>01</span> WHAT I DO</p>
+          <h2>Scripting and<br><span>UI/UX design.</span></h2>
+        </div>
+        <p class="section-intro">I offer scripting and UI/UX design for Roblox games, from gameplay systems to game-ready interfaces.</p>
+      </div>
+      <div class="service-grid">
+        <a class="service-card" href="portfolio.html#scripting">
+          <span class="service-number">01</span>
+          <h3>Scripting</h3>
+          <p>I script systems relatively quickly and work efficiently. I work on both backend and frontend scripting, and can use third-party tools and external libraries. I know how to work with packets and make your systems as difficult to exploit as possible.</p>
+          <em>View scripting work <b aria-hidden="true">↗</b></em>
+        </a>
+        <a class="service-card" href="portfolio.html#ui">
+          <span class="service-number">02</span>
+          <h3>UI/UX Design</h3>
+          <p>I make your UI as efficient and smooth as possible. You can also request scripted UI with animations. Your UI will have a clear hierarchy and be ready to use in your game.</p>
+          <em>View UI work <b aria-hidden="true">↗</b></em>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>MIKETHERBLXDEV</span>
+    <span>ROBLOX DEVELOPER · 4+ YEARS</span>
+    <span>© <span id="year"></span></span>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.querySelector('[data-nav="about"]').classList.add("active");
+  </script>
+  <div class="copy-status" id="copy-status" role="status" aria-live="polite"></div>
+  <script src="site.js" defer></script>
+</body>
+</html>

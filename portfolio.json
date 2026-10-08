@@ -1,0 +1,75 @@
+{
+  "scripting": [
+    {
+      "type": "youtube",
+      "id": "Wy2rbplQK28",
+      "url": "https://www.youtube.com/watch?v=Wy2rbplQK28",
+      "title": "RPG Framework System",
+      "description": "A demo of my RPG framework for Roblox Studio.",
+      "slug": "rpg-framework",
+      "featured": true
+    },
+    {
+      "type": "youtube",
+      "id": "ibiyGn6kSrM",
+      "url": "https://www.youtube.com/watch?v=ibiyGn6kSrM",
+      "title": "Chest Opening System",
+      "description": "A demo of my chest opening system.",
+      "slug": "chest-opening",
+      "featured": false
+    },
+    {
+      "type": "youtube",
+      "id": "xjlcl83Fquk",
+      "url": "https://www.youtube.com/watch?v=xjlcl83Fquk",
+      "title": "Zombie Game Prototype",
+      "description": "A gameplay demo of my zombie game prototype.",
+      "slug": "zombie-game",
+      "featured": false
+    },
+    {
+      "type": "youtube",
+      "id": "69UuARjWwTU",
+      "url": "https://www.youtube.com/watch?v=69UuARjWwTU",
+      "title": "Advanced Combat System",
+      "description": "A demo of my advanced combat system.",
+      "slug": "advanced-combat",
+      "featured": false
+    },
+    {
+      "type": "youtube",
+      "id": "c6Qf5GYsLWk",
+      "url": "https://www.youtube.com/watch?v=c6Qf5GYsLWk",
+      "title": "Expert Level Combat System",
+      "description": "A demo of my expert level combat system.",
+      "slug": "expert-combat",
+      "featured": false
+    }
+  ],
+  "ui": [
+    {
+      "type": "media",
+      "path": "portfolio/ui/HUD.jpg",
+      "title": "Game HUD",
+      "description": "A game HUD with navigation, a shop, play, and class selection.",
+      "slug": "game-hud",
+      "featured": false
+    },
+    {
+      "type": "media",
+      "path": "portfolio/ui/ProfileOverviewUI.png",
+      "title": "Profile Overview UI",
+      "description": "A player profile interface with level progress, titles, and banners.",
+      "slug": "profile-overview",
+      "featured": true
+    },
+    {
+      "type": "media",
+      "path": "portfolio/ui/SimulatorHudUI.png",
+      "title": "Simulator HUD",
+      "description": "A simulator HUD with currencies, pets, rebirths, codes, and level progress.",
+      "slug": "simulator-hud",
+      "featured": false
+    }
+  ]
+}

@@ -7,7 +7,7 @@
       "title": "RPG Framework System",
       "description": "A demo of my RPG framework for Roblox Studio.",
       "slug": "rpg-framework",
-      "featured": true
+      "featured": false
     },
     {
       "type": "youtube",
@@ -44,6 +44,24 @@
       "description": "A demo of my expert level combat system.",
       "slug": "expert-combat",
       "featured": false
+    },
+    {
+      "type": "youtube",
+      "id": "QFS-k1GwGdM",
+      "url": "https://www.youtube.com/watch?v=QFS-k1GwGdM",
+      "title": "Advanced InvetorySystem",
+      "title_source": "youtube",
+      "slug": "QFS-k1GwGdM",
+      "featured": false
+    },
+    {
+      "type": "youtube",
+      "id": "o_DEDJtrOkM",
+      "url": "https://www.youtube.com/watch?v=o_DEDJtrOkM",
+      "title": "Expert Level Movement System",
+      "title_source": "youtube",
+      "slug": "o_DEDJtrOkM",
+      "featured": true
     }
   ],
   "ui": [
@@ -53,6 +71,13 @@
       "title": "Game HUD",
       "description": "A game HUD with navigation, a shop, play, and class selection.",
       "slug": "game-hud",
+      "featured": false
+    },
+    {
+      "type": "media",
+      "path": "assets/UI/Inventory.png",
+      "title": "Inventory",
+      "slug": "inventory",
       "featured": false
     },
     {

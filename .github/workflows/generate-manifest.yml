@@ -7,13 +7,11 @@ on:
       - "*.html"
       - "*.css"
       - "*.js"
+      - "scripts/**"
       - "portfolio.json"
-      - "project-details.json"
       - "CNAME"
       - "sitemap.xml"
       - "robots.txt"
-      - ".github/scripts/generate-manifest.py"
-      - ".github/scripts/test_generate_manifest.py"
       - ".github/workflows/generate-manifest.yml"
   workflow_dispatch:
 
@@ -32,42 +30,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Generate portfolio manifest
-        run: python3 .github/scripts/generate-manifest.py
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
 
       - name: Test content generation
-        run: python3 -m unittest discover -s .github/scripts -p 'test_*.py'
+        run: node --test scripts/portfolio.test.cjs
 
-      - name: Prepare website files
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import shutil
-
-          destination = Path('_site')
-          destination.mkdir(exist_ok=True)
-          public_files = (
-              'index.html', 'portfolio.html', 'contact.html', 'tos.html',
-              'styles.css', 'site.js', 'portfolio.js', 'portfolio.json',
-              'google9f09677e001de9f7.html', 'CNAME', 'sitemap.xml', 'robots.txt',
-          )
-          for filename in public_files:
-              source = Path(filename)
-              if source.is_file() and not source.is_symlink():
-                  shutil.copy2(source, destination / filename)
-          media_extensions = {
-              '.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.avif',
-              '.mp4', '.webm', '.ogg', '.mov', '.m4v', '.ico',
-              '.woff', '.woff2', '.ttf', '.otf',
-          }
-          for source in Path('assets').rglob('*'):
-              if (source.is_file() and not source.is_symlink()
-                      and source.resolve().is_relative_to(Path('assets').resolve())
-                      and source.suffix.lower() in media_extensions):
-                  target = destination / source
-                  target.parent.mkdir(parents=True, exist_ok=True)
-                  shutil.copy2(source, target)
-          PY
+      - name: Generate portfolio and prepare website files
+        run: node scripts/portfolio.cjs --build
 
       - name: Upload website
         uses: actions/upload-pages-artifact@v4

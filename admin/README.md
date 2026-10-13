@@ -1,5 +1,7 @@
 # Private studio manager
 
+**Optional, inactive editor:** the current portfolio is managed manually through the root [`portfolio-content.js`](../portfolio-content.js). Add images to the existing asset folders, edit titles and descriptions in that file, and run **Update portfolio.cmd**. No admin deployment or account setup is needed. See the root [`README.md`](../README.md) for the active workflow. The setup below is retained only if you choose to enable the separate dashboard later; its saved metadata is not the active manual content source.
+
 The public portfolio is live on Cloudflare Workers at `https://miketherblx-portfolio.mike-vb-gpt1.workers.dev/`. Visitors never need an account. This dashboard runs on a **separate Cloudflare Worker** and writes project details, image uploads and YouTube links into the same portfolio repository. Those commits can trigger the connected public build. The repository also includes a GitHub Pages workflow.
 
 The dashboard source is ready, but **live editing is disabled until you configure and deploy it**. No account credentials, Cloudflare resources or GitHub Apps have been created by this change. Opening `admin/public/index.html` as a local file is a visual preview, not an authenticated editor.

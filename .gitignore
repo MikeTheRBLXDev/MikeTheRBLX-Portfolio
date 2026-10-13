@@ -13,3 +13,5 @@ admin/.dev.vars*
 admin/.env*
 __pycache__/
 _site/
+.portfolio-build-*/
+.portfolio-*.tmp

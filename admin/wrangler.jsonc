@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "miketherblx-private-studio",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-13",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "none"
+  },
+  "vars": {
+    "GITHUB_CLIENT_ID": "",
+    "OWNER_ID": "",
+    "REPO_OWNER": "MikeTheRBLXDev",
+    "REPO_NAME": "MikeTheRBLX-Portfolio",
+    "REPO_BRANCH": "main",
+    "ADMIN_ORIGIN": ""
+  },
+  "observability": {
+    "enabled": false
+  }
+}

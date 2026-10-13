@@ -7,7 +7,8 @@
       "title": "RPG Framework System",
       "description": "A demo of my RPG framework for Roblox Studio.",
       "slug": "rpg-framework",
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "type": "youtube",
@@ -16,7 +17,8 @@
       "title": "Chest Opening System",
       "description": "A demo of my chest opening system.",
       "slug": "chest-opening",
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "type": "youtube",
@@ -25,7 +27,8 @@
       "title": "Zombie Game Prototype",
       "description": "A gameplay demo of my zombie game prototype.",
       "slug": "zombie-game",
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "type": "youtube",
@@ -34,7 +37,8 @@
       "title": "Advanced Combat System",
       "description": "A demo of my advanced combat system.",
       "slug": "advanced-combat",
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "type": "youtube",
@@ -43,58 +47,76 @@
       "title": "Expert Level Combat System",
       "description": "A demo of my expert level combat system.",
       "slug": "expert-combat",
-      "featured": false
+      "featured": false,
+      "hidden": false
     },
     {
       "type": "youtube",
       "id": "QFS-k1GwGdM",
       "url": "https://www.youtube.com/watch?v=QFS-k1GwGdM",
       "title": "Advanced InvetorySystem",
-      "title_source": "youtube",
       "slug": "QFS-k1GwGdM",
-      "featured": false
+      "featured": false,
+      "title_source": "youtube",
+      "description": "",
+      "hidden": false
     },
     {
       "type": "youtube",
       "id": "o_DEDJtrOkM",
       "url": "https://www.youtube.com/watch?v=o_DEDJtrOkM",
       "title": "Expert Level Movement System",
-      "title_source": "youtube",
       "slug": "o_DEDJtrOkM",
-      "featured": true
+      "featured": true,
+      "title_source": "youtube",
+      "description": "",
+      "hidden": false
     }
   ],
   "ui": [
     {
       "type": "media",
-      "path": "assets/UI/HUD.jpg",
-      "title": "Game HUD",
-      "description": "A game HUD with navigation, a shop, play, and class selection.",
-      "slug": "game-hud",
-      "featured": false
+      "path": "assets/UI/ProfileOverviewUI.png",
+      "title": "Player profile & progression",
+      "description": "A bold purple player profile with a clear level and XP hierarchy, player titles, and unlockable banners. A consistent visual language connects the profile overview and customization panels.",
+      "slug": "profile-overview",
+      "featured": true,
+      "order": 0,
+      "title_source": "custom",
+      "hidden": false
     },
     {
       "type": "media",
       "path": "assets/UI/Inventory.png",
-      "title": "Inventory",
+      "title": "Fantasy inventory & equipment",
       "slug": "inventory",
-      "featured": false
-    },
-    {
-      "type": "media",
-      "path": "assets/UI/ProfileOverviewUI.png",
-      "title": "Profile Overview UI",
-      "description": "A player profile interface with level progress, titles, and banners.",
-      "slug": "profile-overview",
-      "featured": true
+      "featured": false,
+      "description": "A dark fantasy inventory built around readable item categories, an organized item grid, equipment slots, and a separate item details panel. Gold accents make the selected category and equipped item easy to identify.",
+      "order": 1,
+      "title_source": "custom",
+      "hidden": false
     },
     {
       "type": "media",
       "path": "assets/UI/SimulatorHudUI.png",
-      "title": "Simulator HUD",
-      "description": "A simulator HUD with currencies, pets, rebirths, codes, and level progress.",
+      "title": "Colorful simulator HUD",
+      "description": "A playful simulator interface with distinct currency counters, a level progress bar, and recognizable shortcuts for the shop, pets, rebirths, and codes. Bright icon buttons keep the core actions easy to scan.",
       "slug": "simulator-hud",
-      "featured": false
+      "featured": false,
+      "order": 2,
+      "title_source": "custom",
+      "hidden": false
+    },
+    {
+      "type": "media",
+      "path": "assets/UI/HUD.jpg",
+      "title": "Fantasy game navigation",
+      "description": "A coordinated fantasy HUD with a compact top navigation bar and prominent Shop, Play, and Classes actions. Dark panels, warm borders, and consistent icons give the interface a cohesive style.",
+      "slug": "game-hud",
+      "featured": false,
+      "order": 3,
+      "title_source": "custom",
+      "hidden": false
     }
   ]
 }

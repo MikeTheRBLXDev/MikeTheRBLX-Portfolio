@@ -5,3 +5,11 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Private dashboard local dependencies and secrets
+admin/node_modules/
+admin/.wrangler/
+admin/.dev.vars*
+admin/.env*
+__pycache__/
+_site/

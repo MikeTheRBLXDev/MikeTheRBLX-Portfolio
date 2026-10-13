@@ -1,6 +1,10 @@
 @echo off
 setlocal
 cd /d "%~dp0"
+if exist "%USERPROFILE%\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" (
+  "%USERPROFILE%\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe" ".github\scripts\generate-manifest.py"
+  goto result
+)
 where py >nul 2>nul
 if not errorlevel 1 (
   py -3 ".github\scripts\generate-manifest.py"

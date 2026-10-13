@@ -2,7 +2,7 @@
 
 A public portfolio and enquiry website centered on Roblox UI design, with UI animation, implementation, and selected scripting support. Clients browse the work and contact Mike without creating an account.
 
-The website runs on GitHub Pages. The separate owner dashboard lives in [`admin/`](admin/README.md). It uses a Cloudflare Worker and a private GitHub App restricted to the owner's account and this repository. Its host, account access, and secrets must be configured before editing is enabled. There are no admin passwords or repository tokens in the public website.
+The public website is currently deployed on Cloudflare Workers at `https://miketherblx-portfolio.mike-vb-gpt1.workers.dev/`. The repository also includes a GitHub Pages publishing workflow. The separate owner dashboard lives in [`admin/`](admin/README.md). It uses a Cloudflare Worker and a private GitHub App restricted to the owner's account and this repository. Its host, account access, and secrets must be configured before editing is enabled. There are no admin passwords or repository tokens in the public website.
 
 ## Preview the website
 
@@ -132,9 +132,11 @@ python -m http.server 8000
 
 Open `http://localhost:8000` in your browser. The generator writes UTF-8 JSON and does not require any third-party Python packages.
 
-Upload or push changes to the repository's default branch. The **Update portfolio** workflow generates the manifest, runs the content regression tests, and publishes through GitHub Pages. Metadata edits and new assets trigger it automatically.
+For the current Cloudflare website, Git integration deploys changes from the selected repository branch. Its build must regenerate `portfolio.json` and package the approved public files before deploying. The live site's current Cloudflare build settings still need to be checked; a working homepage by itself does not confirm that future dashboard edits will reach that URL.
 
-GitHub Pages must use **Settings → Pages → Build and deployment → Source → GitHub Actions**. Keep the existing custom domain configured in Pages settings and in `CNAME`.
+The **Update portfolio** workflow generates the manifest, runs the content regression tests, and publishes through GitHub Pages. Metadata edits and new assets trigger that workflow automatically. Its generated output is deployed to GitHub Pages rather than committed back into the repository; Cloudflare does not automatically inherit that output. Keep public publishing separate from the private admin's deployment.
+
+If retaining the GitHub Pages deployment, set **Settings → Pages → Build and deployment → Source → GitHub Actions**. Keep any custom domain configured for its intended hosting platform.
 
 `portfolio.json` is generated during publishing. The workflow deploys the generated file directly instead of creating extra repository commits. Only an explicit list of public pages, scripts, styles, generated data, approved asset types, and optional `CNAME`, `robots.txt`, and `sitemap.xml` enters the Pages artifact. The admin backend, its configuration, source text files, sidecars, and `project-details.json` are excluded from that artifact.
 

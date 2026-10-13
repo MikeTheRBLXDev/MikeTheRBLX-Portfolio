@@ -1,6 +1,6 @@
 # Private studio manager
 
-The public portfolio remains on GitHub Pages. Visitors never need an account. This dashboard runs on a **separate Cloudflare Worker** and writes project details, image uploads and YouTube links into the portfolio repository. Those commits start the normal GitHub Pages publishing workflow.
+The public portfolio is live on Cloudflare Workers at `https://miketherblx-portfolio.mike-vb-gpt1.workers.dev/`. Visitors never need an account. This dashboard runs on a **separate Cloudflare Worker** and writes project details, image uploads and YouTube links into the same portfolio repository. Those commits can trigger the connected public build. The repository also includes a GitHub Pages workflow.
 
 The dashboard source is ready, but **live editing is disabled until you configure and deploy it**. No account credentials, Cloudflare resources or GitHub Apps have been created by this change. Opening `admin/public/index.html` as a local file is a visual preview, not an authenticated editor.
 
@@ -15,6 +15,42 @@ The Worker uses PKCE and encrypted state during sign-in. Session cookies are AES
 Only the login shell, styles and client JavaScript are public on the admin host; they contain no project data or secrets. All project data and writes require owner authentication. The public portfolio's published images and descriptions remain public by design. Hidden projects are excluded from the visible gallery; hiding is not a confidentiality mechanism for files committed to a public repository.
 
 ## One-time setup
+
+### Recommended: deploy the admin through the Cloudflare dashboard
+
+Use the existing Cloudflare account and existing GitHub repository. The Git import creation screen may expose only the build and deploy commands. Create a named Worker first, then connect its repository:
+
+1. Open **Workers & Pages → Create application → Start with Hello World! → Get started**.
+2. Name the Worker **`miketherblx-private-studio`**, matching `admin/wrangler.jsonc`, and deploy the temporary placeholder. If a Worker with this exact name already exists, open it instead.
+3. Open that Worker and select **Settings → Build / Builds → Connect** to connect its Git repository.
+4. Choose `MikeTheRBLXDev/MikeTheRBLX-Portfolio` and use the commands below. Keep Cloudflare's working directory at the repository root; `--prefix admin` selects the admin folder directly.
+
+| Setting | Value |
+| --- | --- |
+| Worker name | `miketherblx-private-studio` |
+| Repository | `MikeTheRBLXDev/MikeTheRBLX-Portfolio` |
+| Production branch | `main` (check under Settings → Build → Branch control after connecting) |
+| Root directory | Repository root: blank or `/` |
+| Build command | `npm --prefix admin install && npm --prefix admin test` |
+| Deploy command | `npm --prefix admin run deploy` |
+
+Save the Git connection and wait for the build. The explicit install command installs the admin project's dependencies, then its tests run. The deploy script executes from the admin package directory and reads its Wrangler configuration. These prefixed commands are for the repository-root setup; a project already configured with root directory `admin` should instead use `npm test` and `npm run deploy` with Cloudflare's automatic dependency installation.
+
+Once the admin code replaces the Hello World placeholder, the first deployment with blank authentication settings shows **Finish your account setup** and keeps editing disabled. Copy the actual admin URL Cloudflare returns; it will be used for the GitHub App homepage, callback and `ADMIN_ORIGIN` below.
+
+Complete steps 2–7 below to register the GitHub App and configure the public, non-secret values in `admin/wrangler.jsonc`. Commit and push that configuration. Leave **Request user authorization (OAuth) during installation** unchecked; start authorization through **Continue with GitHub** on the dashboard so the secure sign-in state is created correctly.
+
+In the private Worker's **Settings → Variables and Secrets**, add `GITHUB_CLIENT_SECRET` and `SESSION_SECRET` as runtime **Secret** values. These are different from build-only secrets. Use the generation instructions below for `SESSION_SECRET`. Keep secret values out of the configuration file and repository. The non-secret values should be edited in `admin/wrangler.jsonc`, since its blank values can overwrite ordinary dashboard variables during a later deployment.
+
+After the updated admin deploys, open its URL and complete the sign-in check in step 11. The CLI steps 8–10 are an alternative deployment method; they are not additionally required for this dashboard route.
+
+### Confirm the public website's publishing build
+
+The public Worker must regenerate `portfolio.json` from the assets and `project-details.json`, package only the approved public files, and deploy that generated output. The current public Worker's build/deploy commands have not yet been inspected. Read them under the public Worker's **Settings → Build** before changing them. The existing GitHub workflow generates content for GitHub Pages; it does not commit its generated JSON, so a Cloudflare build that merely deploys the checked-in files can show stale gallery content.
+
+After completing this connection, test one description edit from the admin and verify it at the public Cloudflare URL. A successful admin save confirms the GitHub commit; a successful public build and a visible update confirm publication.
+
+### GitHub login configuration and optional CLI deployment
 
 1. Choose the dashboard's permanent HTTPS address. A Worker address such as `https://miketherblx-private-studio.YOUR-SUBDOMAIN.workers.dev` is sufficient, or use a dedicated custom domain. The public portfolio keeps its current address. You can deploy once with the supplied blank settings to reserve a Worker address; editing remains disabled.
 2. In GitHub, open **Settings → Developer settings → GitHub Apps → New GitHub App**. Create a new app for this dashboard, with a unique name and the dashboard address as its homepage. This must be a **GitHub App**, not an OAuth App.
@@ -62,7 +98,7 @@ Only the login shell, styles and client JavaScript are public on the admin host;
     npm run deploy
     ```
 
-11. Open the exact `ADMIN_ORIGIN` address and sign in. Check that your projects load. Edit one description and save; confirm the commit and resulting Pages deployment in GitHub. Test an incognito window: it must show only the login shell. A different GitHub account must not be able to edit.
+11. Open the exact `ADMIN_ORIGIN` address and sign in. Check that your projects load. Edit one description and save; confirm the commit and successful public deployment, then verify the edited description at the public website address. Test an incognito window: it must show only the login shell. A different GitHub account must not be able to edit.
 
 The Worker intentionally rejects HTTP and mismatched hostnames when configured. Full authentication cannot be tested at plain `http://localhost`; use the final HTTPS host or a separately configured HTTPS staging host and app callback. Keep `assets.run_worker_first: true`: otherwise Cloudflare could serve static files before the access checks.
 

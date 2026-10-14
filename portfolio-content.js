@@ -36,11 +36,13 @@ module.exports = {
         description: "A fantasy HUD with Shop, Play, and Classes right where you'd expect them. Dark panels and warm borders keep the whole interface feeling connected.",
         order: 3,
       },
-      // "Shop Menu.png": {
-      //   title: "Shop menu",
-      //   description: "A quick look at the shop I made for this game.",
-      //   order: 4,
-      // },
+	  
+	  
+      "ShopUI.png": {
+		title: "Shop Menu",
+		description: "A quick look at the shop I made for this upcomming game.",
+		order: 4,
+      },
     },
     youtube: [
       // {

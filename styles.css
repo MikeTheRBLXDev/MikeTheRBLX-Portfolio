@@ -10,6 +10,23 @@
 .orbit-one{width:94%;height:120%;transform:translate(-50%,-50%)}.orbit-two{width:105%;height:88%;transform:translate(-50%,-50%)}
 /* Contain decorative rings while letting the page keep native vertical scrolling. */
 body{overflow-x:clip}.hero{isolation:isolate}.hero-showcase::before{content:'';position:absolute;z-index:-2;inset:-100px -25px;background:radial-gradient(ellipse at 65% 48%,#348dff18,transparent 64%),radial-gradient(ellipse at 25% 70%,#a49cff12,transparent 58%);pointer-events:none}.hero-project video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain}
+/* Keep motion controllable from the first screen, including on small devices. */
+.header-inner{gap:20px}.main-nav{margin-left:auto}.header-actions{display:flex;align-items:center;gap:8px}.motion-toggle{border:1px solid #33455e;background:#111c2b;border-radius:7px;min-height:42px;padding:9px 12px;font-size:10px;white-space:nowrap;transition:background .2s,border-color .2s}.motion-toggle:hover{background:#23354d;border-color:var(--blue)}.motion-toggle[aria-pressed="false"]{color:var(--muted)}
+/* Reveal once on entry so content stays readable after it has appeared. */
+.motion-ready .scroll-reveal{opacity:0;transform:translate3d(0,var(--reveal-distance,32px),0) scale(var(--reveal-start-scale,1));transition:opacity .7s ease,transform .85s cubic-bezier(.16,1,.3,1)}
+.motion-ready .project-media{--reveal-distance:48px;--reveal-start-scale:.97}
+.motion-ready .scroll-reveal.is-visible,.motion-ready .scroll-reveal:focus-within{opacity:1;transform:none}
+.hero-topline{animation:arrive .8s both}.hero-hello,.hero h1,.hero-description,.hero-actions,.scroll-cue{animation-timing-function:cubic-bezier(.16,1,.3,1)}
+.hero-showcase{animation:showcase-arrive 1.1s .25s both}.floating-board{animation:float 5.5s ease-in-out infinite}.availability i{animation:status-pulse 2.8s ease-in-out infinite}.scroll-cue>span:last-child{display:inline-block;animation:scroll-nudge 1.8s ease-in-out infinite}
+.media-modal[open]{animation:preview-arrive .3s cubic-bezier(.16,1,.3,1)}.media-modal[open]::backdrop{animation:backdrop-arrive .25s ease}.main-nav.is-open{animation:preview-arrive .25s ease}
+@keyframes showcase-arrive{from{opacity:0;transform:translate3d(0,40px,0) scale(.96)}to{opacity:1;transform:none}}
+@keyframes status-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.8)}}
+@keyframes scroll-nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@keyframes preview-arrive{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes backdrop-arrive{from{opacity:0}to{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@media(min-width:621px) and (max-width:900px){.header-inner{gap:16px}.brand{font-size:16px}.main-nav{gap:18px;font-size:11px}.main-nav .nav-contact{gap:14px;padding:10px 12px}}
+@media(max-width:620px){.header-inner{gap:8px}.motion-toggle{font-size:0;width:42px;padding:0}.motion-toggle::before{content:'↝';font-size:22px}.motion-toggle[aria-pressed="false"]::before{content:'Ⅱ';font-size:16px}}
 @media(min-width:1600px){.hero{padding-bottom:100px}.hero-layout{padding-top:85px}.hero h1{font-size:104px}}
 @media(max-width:1100px){.container{width:calc(100% - 64px)}.hero-layout{gap:25px}.hero h1{font-size:76px}.about-section,.contact-section{gap:55px}.skills-inner{gap:12px}.skills-inner>span{max-width:100px;line-height:1.7}.skills-inner p{font-size:10px}.project-copy{gap:30px}}
 @media(max-width:900px){.hero-layout{grid-template-columns:1fr;gap:80px;padding-top:45px}.hero-copy{max-width:620px}.hero h1{font-size:88px}.hero-description{max-width:470px}.hero-showcase{width:min(620px,calc(100% - 20px));margin:0 auto}.hero{padding-bottom:65px}.skills-inner{flex-wrap:wrap;justify-content:center;gap:16px 28px}.skills-inner>span{max-width:none;flex-basis:100%;text-align:center}.section-heading{gap:25px}.section-heading>p{max-width:280px;font-size:12px}.about-section,.contact-section{gap:40px;grid-template-columns:1fr 1fr}.about-intro h2,.contact-copy h2{font-size:46px}.brief-panel{padding:23px}.terms-list article{grid-template-columns:30px .8fr 1.2fr;gap:20px}.project-copy h3{font-size:22px}}

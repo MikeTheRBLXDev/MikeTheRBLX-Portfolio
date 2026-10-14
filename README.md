@@ -72,7 +72,7 @@ Delete a media file or remove a video entry to remove its project. Hiding work d
 
 Current showcase images have smaller WebP copies in `assets/previews/`; their full-resolution originals remain in `assets/UI/`. The generator detects matching `<filename with extension>-800.webp` and `-1600.webp` pairs and adds them to the manifest. New images work immediately without those copies, using the original file. For large new images, export appropriately sized WebP versions using the same naming convention for faster loading.
 
-The page uses responsive previews, lazy loading, and click-to-load video players. Scroll effects use transforms and opacity, and visitors who prefer reduced motion can browse without the movement. The footer's motion switch lets a visitor override that preference; the choice is remembered in their browser.
+The page uses responsive previews, lazy loading, and click-to-load video players. Sections and project cards fade and slide into view once, then stay visible. The introduction, floating design desk, status indicator, and preview dialog also animate. Visitors who prefer reduced motion can browse without movement. The header's motion switch lets a visitor turn animations on or off, including overriding the system preference; the choice is remembered in their browser. On small screens, the switch uses a motion or pause icon.
 
 ## Build, test, and publish
 

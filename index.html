@@ -26,7 +26,7 @@
     <div class="header-inner container">
       <a class="brand" href="#home" aria-label="MikeTheRBLXDev home"><img src="assets/previews/avatar.webp" alt="" width="44" height="44"><span>Mike<span class="brand-light">TheRBLXDev</span><small>UI DESIGNER & ANIMATOR</small></span></a>
       <nav id="main-nav" class="main-nav" aria-label="Main navigation"><a href="#work">Work</a><a href="#about">About</a><a href="#tos">ToS</a><a href="#contact" class="nav-contact">Let’s talk <span aria-hidden="true">↗</span></a></nav>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu <span aria-hidden="true">+</span></button>
+      <div class="header-actions"><button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="true">Motion: on</button><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu <span aria-hidden="true">+</span></button></div>
     </div>
   </header>
   <main id="main" tabindex="-1">
@@ -65,13 +65,13 @@
     </section>
     <section class="terms-section" id="tos" aria-labelledby="terms-heading"><div class="container">
       <div class="section-heading scroll-reveal"><div><p class="eyebrow">03 / BEFORE YOU DM ME</p><h2 id="terms-heading">The terms.<br><em>No guessing.</em></h2></div><p>Please read all of this before contacting me<br>for a commission. These terms matter.</p></div>
-      <div class="terms-lead"><span aria-hidden="true">↗</span><p><strong>If you contact me for a commission, these terms apply.</strong> If I reach out to you myself, the terms may change. We’ll discuss and agree on any changes before work starts.</p></div>
+      <div class="terms-lead scroll-reveal"><span aria-hidden="true">↗</span><p><strong>If you contact me for a commission, these terms apply.</strong> If I reach out to you myself, the terms may change. We’ll discuss and agree on any changes before work starts.</p></div>
       <div class="terms-list">
-        <article><span class="term-number">01</span><h3>30% before I start.</h3><p>A 30% upfront payment is required before I begin any service.</p></article>
-        <article><span class="term-number">02</span><h3>A note on AI icons.</h3><p>For UI work, <strong>only the icons</strong> may be created using AI. No other part of the UI service is AI-generated.</p></article>
-        <article><span class="term-number">03</span><h3>70% before delivery.</h3><p>I’ll show you the finished result, then the remaining 70% is due. Files are delivered after that payment is made.</p></article>
-        <article><span class="term-number">04</span><h3>Refunds.</h3><p>Purchased assets are non-refundable. One-purchase-only packages may be refunded if the reason is valid.</p></article>
-        <article><span class="term-number">05</span><h3>We’re on the same page.</h3><p>By commissioning me, you agree to these terms. If I contacted you myself, any different terms must be discussed and agreed on before work begins.</p></article>
+        <article class="scroll-reveal"><span class="term-number">01</span><h3>30% before I start.</h3><p>A 30% upfront payment is required before I begin any service.</p></article>
+        <article class="scroll-reveal"><span class="term-number">02</span><h3>A note on AI icons.</h3><p>For UI work, <strong>only the icons</strong> may be created using AI. No other part of the UI service is AI-generated.</p></article>
+        <article class="scroll-reveal"><span class="term-number">03</span><h3>70% before delivery.</h3><p>I’ll show you the finished result, then the remaining 70% is due. Files are delivered after that payment is made.</p></article>
+        <article class="scroll-reveal"><span class="term-number">04</span><h3>Refunds.</h3><p>Purchased assets are non-refundable. One-purchase-only packages may be refunded if the reason is valid.</p></article>
+        <article class="scroll-reveal"><span class="term-number">05</span><h3>We’re on the same page.</h3><p>By commissioning me, you agree to these terms. If I contacted you myself, any different terms must be discussed and agreed on before work begins.</p></article>
       </div>
     </div></section>
     <section class="contact-section container" id="contact" aria-labelledby="contact-heading">
@@ -79,7 +79,7 @@
       <div class="brief-panel scroll-reveal"><p class="eyebrow">DON’T KNOW WHAT TO SAY?</p><h3>Start with a little brief.</h3><p>Put your thoughts here, then copy the message into Discord.</p><form id="brief-form"><label for="project-name">Your game or project</label><input id="project-name" name="project" placeholder="What are you working on?" maxlength="120" required><label for="project-details">What do you need?</label><textarea id="project-details" name="details" placeholder="The screens, the style, any reference links…" maxlength="3000" required rows="4"></textarea><div class="field-grid"><div><label for="project-budget">Budget <span>(optional)</span></label><input id="project-budget" name="budget" placeholder="Your range" maxlength="80"></div><div><label for="project-timing">Timeline <span>(optional)</span></label><input id="project-timing" name="timing" placeholder="A date, or flexible" maxlength="80"></div></div><button type="submit" class="button button-outline">Prepare my message <span aria-hidden="true">↗</span></button></form><div id="brief-result" hidden><h4 id="brief-result-title" tabindex="-1">Ready to copy.</h4><pre id="brief-text"></pre><button id="copy-brief" type="button" class="button button-primary">Copy message <span aria-hidden="true">⧉</span></button><p>Paste this into your Discord DM. Nothing has been sent.</p></div></div>
     </section>
   </main>
-  <footer class="site-footer container"><a href="#home" class="footer-brand">Mike<span>TheRBLXDev</span><i aria-hidden="true">✦</i></a><div><a href="#work">Work</a><a href="#tos">ToS</a><a href="#contact">Contact</a><a href="https://x.com/MikeTheRBLXDev" target="_blank" rel="noopener noreferrer">X ↗</a><button id="motion-toggle" class="text-button" type="button" aria-pressed="true">Motion: on</button></div><p>© <span id="year">2026</span> MikeTheRBLXDev. Made for the way players play.</p><a class="back-top" href="#home" aria-label="Back to top">↑</a></footer>
+  <footer class="site-footer container"><a href="#home" class="footer-brand">Mike<span>TheRBLXDev</span><i aria-hidden="true">✦</i></a><div><a href="#work">Work</a><a href="#tos">ToS</a><a href="#contact">Contact</a><a href="https://x.com/MikeTheRBLXDev" target="_blank" rel="noopener noreferrer">X ↗</a></div><p>© <span id="year">2026</span> MikeTheRBLXDev. Made for the way players play.</p><a class="back-top" href="#home" aria-label="Back to top">↑</a></footer>
   <dialog id="media-modal" class="media-modal" aria-labelledby="modal-title"><div class="modal-toolbar"><h2 id="modal-title"></h2><button type="button" id="modal-close" class="icon-button" aria-label="Close preview">×</button></div><div id="modal-content" class="modal-content"></div><p id="modal-description"></p><div class="modal-actions"><button id="copy-project" type="button" class="button button-outline">Copy project link <span aria-hidden="true">⧉</span></button><a href="#contact" id="modal-contact" class="button button-primary">Want something like this? <span aria-hidden="true">↗</span></a></div></dialog>
   <div id="copy-status" class="copy-status" role="status" aria-live="polite"></div>
 </body>

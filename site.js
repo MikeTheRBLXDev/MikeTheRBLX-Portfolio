@@ -112,37 +112,17 @@
   form.addEventListener('input', () => { result.hidden = true; });
   document.getElementById('copy-brief').addEventListener('click', event => copy(briefText.textContent, 'Message copied. Paste it into Discord.', event.currentTarget));
 
-  // Read stable, unanimated wrappers so scroll transforms never feed back into measurements.
+  // Observe stable wrappers; revealing the child must not change its trigger position.
   const tracks = new Map();
-  const active = new Set();
-  let frame = 0;
-  const clamp = value => Math.max(0, Math.min(1, value));
-  function renderScroll() {
-    frame = 0;
-    if (motionReduced() || document.hidden) return;
-    const height = window.innerHeight;
-    const measurements = [...active].map(track => [track, track.getBoundingClientRect()]);
-    for (const [track, bounds] of measurements) {
-      const node = tracks.get(track);
-      const enter = clamp((height - bounds.top) / (height * .52));
-      const leave = clamp((bounds.bottom - 45) / (height * .2));
-      const progress = Math.min(enter, leave);
-      const ease = 1 - Math.pow(1 - progress, 3);
-      const travel = node.classList.contains('project-media') ? 42 : 24;
-      const y = enter < 1 ? travel * (1 - ease) : -travel * .6 * (1 - ease);
-      node.style.setProperty('--reveal-opacity', (.16 + .84 * ease).toFixed(3));
-      node.style.setProperty('--reveal-y', `${y.toFixed(2)}px`);
-      if (node.classList.contains('project-media')) node.style.setProperty('--reveal-scale', (.975 + .025 * ease).toFixed(4));
-    }
+  function reveal(track) {
+    tracks.get(track).classList.add('is-visible');
+    revealObserver?.unobserve(track);
   }
-  function scheduleScroll() { if (!frame && !motionReduced()) frame = requestAnimationFrame(renderScroll); }
-  const revealObserver = new IntersectionObserver(entries => {
+  const revealObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     for (const entry of entries) {
-      if (entry.isIntersecting) active.add(entry.target);
-      else active.delete(entry.target);
+      if (entry.isIntersecting || entry.boundingClientRect.bottom <= 0) reveal(entry.target);
     }
-    scheduleScroll();
-  }, {rootMargin: '100px 0px'});
+  }, {rootMargin: '0px 0px -40px 0px'}) : null;
   function observeScroll(scope = document) {
     for (const node of scope.querySelectorAll('.scroll-reveal')) {
       if (node.parentElement.classList.contains('scroll-track')) continue;
@@ -151,20 +131,20 @@
       node.before(track);
       track.append(node);
       tracks.set(track, node);
-      revealObserver.observe(track);
+      if (revealObserver) revealObserver.observe(track);
+      else node.classList.add('is-visible');
     }
-    scheduleScroll();
   }
   window.portfolioObserve = observeScroll;
   observeScroll();
-  window.addEventListener('scroll', scheduleScroll, {passive: true});
-  window.addEventListener('resize', scheduleScroll, {passive: true});
-  document.addEventListener('visibilitychange', scheduleScroll);
+  if (revealObserver) document.documentElement.classList.add('motion-ready');
   function updateMotion() {
     updateMotionControl();
-    if (motionReduced()) {
-      for (const node of tracks.values()) for (const key of ['--reveal-y', '--reveal-scale', '--reveal-opacity']) node.style.removeProperty(key);
-    } else scheduleScroll();
+    // Reveal anything already passed when motion is enabled after browsing without it.
+    for (const [track, node] of tracks) {
+      if (!node.classList.contains('is-visible') && track.getBoundingClientRect().top < window.innerHeight - 40) reveal(track);
+    }
+    resetTilt();
   }
   reduceMotion.addEventListener('change', updateMotion);
   motionButton.addEventListener('click', () => {
@@ -199,16 +179,21 @@
     if (tiltFrame) return;
     tiltFrame = requestAnimationFrame(() => {
       tiltFrame = 0;
-      const bounds = board.getBoundingClientRect();
+      if (motionReduced() || !finePointer.matches) return;
+      const bounds = floatBoard.getBoundingClientRect();
       board.style.setProperty('--rx', `${((.5 - (pointer.y - bounds.top) / bounds.height) * 5).toFixed(2)}deg`);
       board.style.setProperty('--ry', `${(((pointer.x - bounds.left) / bounds.width - .5) * 5).toFixed(2)}deg`);
     });
   });
-  board.addEventListener('pointerleave', () => {
+  function resetTilt() {
     cancelAnimationFrame(tiltFrame); tiltFrame = 0;
-    board.style.setProperty('--rx', '0deg'); board.style.setProperty('--ry', '0deg');
-  });
-  new IntersectionObserver(([entry]) => {
-    floatBoard.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
-  }).observe(floatBoard);
+    board.style.removeProperty('--rx'); board.style.removeProperty('--ry');
+  }
+  board.addEventListener('pointerleave', resetTilt);
+  finePointer.addEventListener('change', resetTilt);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      floatBoard.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+    }).observe(floatBoard);
+  }
 })();

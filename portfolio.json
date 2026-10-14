@@ -55,6 +55,15 @@
       },
       "slug": "game-hud",
       "featured": false
+    },
+    {
+      "type": "media",
+      "path": "assets/UI/ShopUI.png",
+      "title": "Shop UI",
+      "description": "",
+      "hidden": false,
+      "slug": "shop-ui",
+      "featured": false
     }
   ]
 }

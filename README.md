@@ -1,101 +1,94 @@
-# MikeTheRBLXDev — Roblox UI design
+# Mike's Roblox UI portfolio
 
-A public Roblox UI design portfolio with UI animation, implementation, and selected scripting support. Clients browse your work and contact you without logging in.
+One page for the introduction, work, Terms of Service, and contact. Clients scroll through one large showcase at a time. There is no category picker or separate gallery page.
 
-Manage projects through **`portfolio-content.js`**, and keep dropping images into the existing folders. No admin account, GitHub App, additional Worker, npm install, or Python setup is needed for this workflow.
+The site uses plain HTML, CSS, and JavaScript. Content generation and preview use Node.js built-in modules, with no npm install or extra service required.
 
-## The everyday workflow
+## Add work
 
-1. Put new images in **`assets/UI/`** for UI design, or **`assets/Scripting/`** for supporting scripting work. Subfolders work too.
-2. Open **`portfolio-content.js`** in your text editor to add descriptions, custom titles, or YouTube videos. Image details are optional: an image with no entry appears automatically, using its filename as the starting title.
-3. Double-click **`Update portfolio.cmd`** to regenerate `portfolio.json`.
-4. Double-click **`Preview portfolio.cmd`**, then open **http://127.0.0.1:4173** to check the site. Keep the command window open; press Ctrl+C to stop.
-5. Upload or push your changed files to the existing GitHub repository, including **`portfolio-content.js`**, **`portfolio.json`**, and any new images. Your connected Cloudflare deployment publishes the changes.
+1. Drop images or local videos into **`assets/UI/`**. Subfolders work too.
+2. Add custom titles and descriptions in **`portfolio-content.js`** if you want them. Files without an entry still appear, with a title taken from the filename.
+3. Double-click **`Update portfolio.cmd`** to update the generated `portfolio.json`.
+4. Double-click **`Preview portfolio.cmd`** and open **http://127.0.0.1:4173**. Keep the command window open; Ctrl+C stops it.
+5. Commit the content file, generated JSON, and new media to your repository, or upload the built `_site/` folder through your existing host.
 
-The command files use an installed Node.js runtime or the Node.js runtime already bundled with Codex on this computer. If neither exists, install Node.js and reopen the command file. You do not need to install project dependencies.
+The command files use installed Node.js or the Node.js runtime bundled with Codex on this computer.
 
-## Image titles and descriptions
+## Titles and descriptions
 
-Add an entry under `ui.images` for a file in `assets/UI/`:
+An image's settings go under `ui.images`. The key must match its filename, including the extension:
 
 ```js
 "Shop Menu.png": {
-  title: "Simulator shop interface",
-  description: "A clear shop layout with easy-to-find upgrades.",
-  featured: true,
+  title: "Shop menu",
+  description: "A quick look at the shop I made for this game.",
   order: 4,
 },
 ```
 
-The key must match the image filename, including its extension. For subfolders, use a forward slash, such as `Menus/Shop Menu.png`. An entry does not create an image: the matching file must exist in the folder.
+For a nested file, use a forward slash: `Menus/Shop Menu.png`. Settings do not create a project unless the matching media file exists.
 
-Supported images: PNG, JPG, JPEG, WebP, GIF, SVG, and AVIF. Local MP4, WebM, OGG, MOV, and M4V videos also work in these folders, with details added in the same `images` map. General branding stays in `assets/NormalAssets/`; that folder does not become gallery projects.
+Supported images: PNG, JPG, JPEG, WebP, GIF, SVG, and AVIF. Local MP4, WebM, OGG, MOV, and M4V videos use the same folder and settings map. Branding stays in `assets/NormalAssets/` and does not appear as a project.
 
-## YouTube videos
+## YouTube UI demos
 
-Add entries to `ui.youtube` or `scripting.youtube`. The quick version is:
-
-```js
-"Inventory interaction demo | https://youtu.be/VIDEO_ID",
-```
-
-Put a `*` at the start to feature it:
-
-```js
-"* Inventory interaction demo | https://youtu.be/VIDEO_ID",
-```
-
-For a description and more settings, use an object instead:
+Add a video under `ui.youtube` in `portfolio-content.js`:
 
 ```js
 {
   url: "https://youtu.be/VIDEO_ID",
-  title: "Animated inventory interface",
-  description: "A walkthrough of the layout and UI animations.",
-  featured: true,
-  order: 0,
+  title: "Inventory animation",
+  description: "See the inventory open, close, and react to input.",
+  order: 4,
 },
 ```
 
-Replace `VIDEO_ID` with the real YouTube video ID, or paste the full real YouTube URL. Standard watch URLs, short URLs, Shorts, embeds, and live links work. Give each new video a title so publishing does not depend on a title lookup.
+Replace `VIDEO_ID` with a real video ID, or paste its full YouTube URL. Watch, short, Shorts, embed, and live links are supported. Give the video a title to avoid a build-time title lookup.
 
-The `youtube` arrays in `portfolio-content.js` are the active video lists. Old `.txt` video lists are a fallback only when a category's entire `youtube` property is omitted. An empty `youtube: []` means no YouTube videos in that category.
+A quick entry also works:
 
-## Optional project settings
+```js
+"Inventory animation | https://youtu.be/VIDEO_ID",
+```
+
+Start that string with `*` to feature it in the introduction. `youtube: []` means there are no YouTube projects. Only the content file supplies video entries; text-file lists and old metadata are no longer used. The website loads a YouTube player when a visitor chooses to play a demo.
+
+## Optional settings
 
 | Field | Effect |
 | --- | --- |
-| `title` | Custom project name |
-| `description` | Text explaining the project |
-| `featured: true` | Highlights the project in its category |
+| `title` | Project name |
+| `description` | Text below the preview |
+| `featured: true` | Selects the introduction's featured project |
 | `featured: false` | Excludes it from automatic featured selection |
-| `hidden: true` | Keeps it out of the visible gallery |
-| `order` | Lower numbers appear first; unordered projects follow |
+| `hidden: true` | Removes it from the visible showcase |
+| `order` | Lower numbers appear first; unordered files follow |
 
-Use one featured project per category. If several visible projects are explicitly marked, the last marked item wins: image entries are considered first, then YouTube entries. Existing project links remain stable when titles change.
+Choose one featured project. If several visible entries are marked, the last marked entry wins: image settings first, then YouTube entries. Existing project slugs remain stable when titles change.
 
-Remove a video from its `youtube` array to remove it from the gallery. Delete an image file to remove that image; its optional details entry can also be deleted. Hiding a project only removes it from the gallery: uploaded files and their direct URLs remain public.
+Delete a media file or remove a video entry to remove its project. Hiding work does not make uploaded files or direct media URLs private. Keep commas between entries and use quoted text. Invalid content leaves the last valid generated JSON intact.
 
-Keep commas between entries and use quoted text. The generator reports invalid entries or syntax errors without replacing the last valid `portfolio.json`.
+## Images and performance
 
-## Build and publishing
+Current showcase images have smaller WebP copies in `assets/previews/`; their full-resolution originals remain in `assets/UI/`. The generator detects matching `<filename with extension>-800.webp` and `-1600.webp` pairs and adds them to the manifest. New images work immediately without those copies, using the original file. For large new images, export appropriately sized WebP versions using the same naming convention for faster loading.
 
-The active generator uses only Node.js built-in modules:
+The page uses responsive previews, lazy loading, and click-to-load video players. Scroll effects use transforms and opacity, and visitors who prefer reduced motion can browse without the movement. The footer's motion switch lets a visitor override that preference; the choice is remembered in their browser.
+
+## Build, test, and publish
 
 ```powershell
+node --test scripts/portfolio.test.cjs
 node scripts/portfolio.cjs
 node scripts/portfolio.cjs --build
 ```
 
-The first command updates `portfolio.json`. The second also packages the public website into `_site/`. The updated GitHub Pages workflow uses this same generator.
+The update command regenerates `portfolio.json`. Build also replaces `_site/` with the public page, its media, hosting redirects, and SEO files. Content source, scripts, tests, and repository files are excluded from the public package. The GitHub Pages workflow uses the same generator.
 
-You can continue publishing to your current Cloudflare site by committing the freshly generated `portfolio.json`; there is no additional service to set up. To regenerate automatically during Cloudflare builds, use these commands from the repository root:
+For your existing Cloudflare setup:
 
-| Cloudflare setting | Value |
+| Setting | Value |
 | --- | --- |
 | Build command | `node scripts/portfolio.cjs --build` |
 | Deploy command | `npx wrangler deploy --config scripts/cloudflare.wrangler.jsonc` |
 
-The optional `scripts/cloudflare.wrangler.jsonc` publishes `_site/` when explicitly selected by that deploy command. It does not change your current Cloudflare setup automatically. The private admin, content source, and legacy metadata are excluded from that public package.
-
-The old Python generator, `project-details.json`, and adjacent metadata files are retained for reference; the active manual workflow uses `portfolio-content.js`. The optional dashboard source remains in `admin/`, but it is inactive and is not needed. Return to its setup only if you decide you want an authenticated editor later.
+The Wrangler configuration publishes `_site/` when explicitly selected. Run that deploy command only when you want to publish. Cloudflare and the local preview redirect the old `/portfolio.html`, `/contact.html`, and `/tos.html` URLs into the matching section of the new page. GitHub Pages does not process Cloudflare `_redirects` rules.

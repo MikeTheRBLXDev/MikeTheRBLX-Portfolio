@@ -1,17 +1,13 @@
-# OS
+# OS and editors
 .DS_Store
 Thumbs.db
-
-# Editor
 .vscode/
 .idea/
 
-# Private dashboard local dependencies and secrets
-admin/node_modules/
-admin/.wrangler/
-admin/.dev.vars*
-admin/.env*
-__pycache__/
+# Local output and secrets
 _site/
 .portfolio-build-*/
 .portfolio-*.tmp
+.wrangler/
+.env*
+.dev.vars*

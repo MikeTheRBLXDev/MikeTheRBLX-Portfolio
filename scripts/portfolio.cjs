@@ -7,10 +7,11 @@ const path = require('node:path');
 const vm = require('node:vm');
 const {randomUUID} = require('node:crypto');
 
-const FOLDERS = {ui: 'UI', scripting: 'Scripting'};
+const FOLDERS = {ui: 'UI'};
+const ASSET_FOLDERS = ['UI', 'NormalAssets', 'previews'];
 const MEDIA = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.avif', '.mp4', '.webm', '.ogg', '.mov', '.m4v']);
 const ASSETS = new Set([...MEDIA, '.ico', '.woff', '.woff2', '.ttf', '.otf']);
-const PUBLIC_FILES = ['index.html', 'portfolio.html', 'contact.html', 'tos.html', 'styles.css', 'site.js', 'portfolio.js', 'portfolio.json', 'google9f09677e001de9f7.html', 'sitemap.xml', 'robots.txt'];
+const PUBLIC_FILES = ['index.html', 'styles.css', 'site.js', 'portfolio.js', 'portfolio.json', 'google9f09677e001de9f7.html', 'sitemap.xml', 'robots.txt', 'CNAME', '_redirects'];
 const DETAILS = new Set(['title', 'description', 'featured', 'hidden', 'order']);
 const VIDEO_ID = /^[A-Za-z0-9_-]{11}$/;
 const record = value => value !== null && typeof value === 'object' && !Array.isArray(value) && Object.prototype.toString.call(value) === '[object Object]';
@@ -148,10 +149,21 @@ async function atomicJSON(root, filename, data) {
   const target = path.join(root, filename);
   const existing = await statOrNull(target);
   if (existing?.isSymbolicLink() || existing && !existing.isFile()) error(filename, 'output must be a regular file');
+  const content = JSON.stringify(data, null, 2) + '\n';
+  // Leave identical output alone: this also avoids needless OneDrive sync locks.
+  if (existing && await fs.readFile(target, 'utf8') === content) return;
   const temporary = path.join(root, `.portfolio-${randomUUID()}.tmp`);
   try {
-    await fs.writeFile(temporary, JSON.stringify(data, null, 2) + '\n', {encoding: 'utf8', flag: 'wx'});
-    await fs.rename(temporary, target);
+    await fs.writeFile(temporary, content, {encoding: 'utf8', flag: 'wx'});
+    for (let attempt = 0; ; attempt++) {
+      try { await fs.rename(temporary, target); break; }
+      catch (failure) {
+        // A sync client may briefly hold the destination. Never delete the
+        // previous valid manifest to work around a lock; retry for at most 750ms.
+        if (!['EPERM', 'EACCES', 'EBUSY'].includes(failure.code) || attempt >= 4) throw failure;
+        await new Promise(resolve => setTimeout(resolve, 50 * 2 ** attempt));
+      }
+    }
   } finally { await fs.rm(temporary, {force: true}); }
 }
 
@@ -165,6 +177,7 @@ async function generate(root, options = {}) {
     if (record(item)) cache.set(identity(item), item);
   }
   const lookup = options.lookup || fetchTitle;
+  const previewFiles = new Set((await walk(path.join(root, 'assets', 'previews'), root)).map(filename => path.relative(root, filename).split(path.sep).join('/')));
   for (const [category, folderName] of Object.entries(FOLDERS)) {
     const settings = config[category] || {};
     const folder = path.join(root, 'assets', folderName);
@@ -180,24 +193,16 @@ async function generate(root, options = {}) {
       const relative = path.relative(folder, filename).split(path.sep).join('/');
       const details = imageSettings[relative] || {};
       const item = {type: 'media', path: `assets/${folderName}/${relative}`, title: details.title || humanTitle(relative), description: '', hidden: false, ...details};
+      const previewBase = `assets/previews/${path.basename(filename)}`;
+      const preview = {small: `${previewBase}-800.webp`, large: `${previewBase}-1600.webp`};
+      if (previewFiles.has(preview.small) && previewFiles.has(preview.large)) item.preview = preview;
       usedImages.add(relative);
       items.push(item);
     }
     // Image feature priority follows the order of entries in the editable file.
     for (const filename of markedImages) if (usedImages.has(filename)) markers.push(`media:assets/${folderName}/${filename}`);
     for (const filename of Object.keys(imageSettings)) if (!usedImages.has(filename)) options.onWarning?.(`${category}: settings for ${filename} have no matching image; ignored`);
-    let videos;
-    if (Object.hasOwn(settings, 'youtube')) videos = settings.youtube.map((entry, index) => parseVideoEntry(entry, `${category}.youtube[${index}]`)).filter(Boolean);
-    else {
-      videos = [];
-      for (const filename of files.filter(file => path.extname(file).toLowerCase() === '.txt')) {
-        const lines = (await fs.readFile(filename, 'utf8')).replace(/^\uFEFF/, '').split(/\r?\n/);
-        for (let index = 0; index < lines.length; index++) {
-          try { const entry = parseVideoEntry(lines[index], `${path.relative(root, filename)}:${index + 1}`); if (entry) videos.push(entry); }
-          catch { options.onWarning?.(`Skipped invalid YouTube line in ${path.relative(root, filename)}:${index + 1}`); }
-        }
-      }
-    }
+    const videos = (settings.youtube || []).map((entry, index) => parseVideoEntry(entry, `${category}.youtube[${index}]`)).filter(Boolean);
     for (const entry of videos) {
       if (seenVideos.has(entry.id)) { options.onWarning?.(`${category}: duplicate YouTube video ${entry.id}; first entry kept`); continue; }
       seenVideos.add(entry.id);
@@ -264,11 +269,13 @@ async function build(root, options = {}) {
       const status = await statOrNull(source);
       if (status?.isFile() && !status.isSymbolicLink()) await fs.copyFile(source, path.join(staging, filename));
     }
-    for (const source of await walk(path.join(root, 'assets'), root)) {
-      if (!ASSETS.has(path.extname(source).toLowerCase())) continue;
-      const target = path.join(staging, path.relative(root, source));
-      await fs.mkdir(path.dirname(target), {recursive: true});
-      await fs.copyFile(source, target);
+    for (const folder of ASSET_FOLDERS) {
+      for (const source of await walk(path.join(root, 'assets', folder), root)) {
+        if (!ASSETS.has(path.extname(source).toLowerCase())) continue;
+        const target = path.join(staging, path.relative(root, source));
+        await fs.mkdir(path.dirname(target), {recursive: true});
+        await fs.copyFile(source, target);
+      }
     }
     if (existing) { await fs.rename(destination, backup); movedPrevious = true; }
     try { await fs.rename(staging, destination); }

@@ -1,113 +1,54 @@
-// YOUR PORTFOLIO CONTENT
-// Edit this file in any text editor, then double-click Update portfolio.cmd.
-// Drop images into assets/UI/ or assets/Scripting/; they appear automatically.
-// Add an images entry below only when you want to customize an image.
-// For subfolders, use "Folder Name/Image.png" as its key.
+// Drop images or local videos into assets/UI/, then run Update portfolio.cmd.
+// Files appear automatically. Add matching entries below for custom text.
+// Subfolders work: use "Menus/Shop.png" as the key.
 //
-// Optional fields for images and YouTube objects:
-//   title:       the project name clients see
-//   description: a short explanation of the project
-//   featured:    true to highlight this project; false to exclude it
-//   hidden:      true to keep this project out of the gallery
-//   order:       lower numbers appear first
-// Choose one featured project per category. If several are marked true,
-// the last marked visible item wins (images first, then YouTube).
+// Optional fields: title, description, featured, hidden, order.
+// Lower order numbers appear first. Keep one featured project for the hero.
+// If several visible entries are featured, the last marked entry wins
+// (image settings first, then YouTube entries).
 //
-// YouTube can also be a simple line, with * to feature it:
-//   "* My new UI demo | https://youtu.be/VIDEO_ID"
-// Use an object instead when you also want a description or other settings.
-// These youtube arrays are the active lists. Old youtube.txt files are only
-// used if you remove the entire youtube property from that category.
-// Keep commas between entries and quote text with "double quotes".
+// Add UI demos in youtube below. Objects support the same optional fields.
+// A quick entry also works: "My UI demo | https://youtu.be/VIDEO_ID".
+// Start that string with * to feature it. Use a real video URL.
+// Keep commas between entries and quote your text.
 
 module.exports = {
   ui: {
     images: {
       "ProfileOverviewUI.png": {
         title: "Player profile & progression",
-        description: "A bold purple player profile with a clear level and XP hierarchy, player titles, and unlockable banners. A consistent visual language connects the profile overview and customization panels.",
+        description: "A purple player profile with levels, XP, titles, and unlockable banners. Everything a player needs to show off their progress, in one place.",
         featured: true,
         order: 0,
       },
       "Inventory.png": {
         title: "Fantasy inventory & equipment",
-        description: "A dark fantasy inventory built around readable item categories, an organized item grid, equipment slots, and a separate item details panel. Gold accents make the selected category and equipped item easy to identify.",
+        description: "A dark fantasy inventory with room for your items, equipment, and the details that matter. Gold accents help you spot what's selected and equipped.",
         order: 1,
       },
       "SimulatorHudUI.png": {
         title: "Colorful simulator HUD",
-        description: "A playful simulator interface with distinct currency counters, a level progress bar, and recognizable shortcuts for the shop, pets, rebirths, and codes. Bright icon buttons keep the core actions easy to scan.",
+        description: "Bright buttons, clear currency counters, and quick access to shops, pets, rebirths, and codes. A playful HUD made for a busy simulator.",
         order: 2,
       },
       "HUD.jpg": {
         title: "Fantasy game navigation",
-        description: "A coordinated fantasy HUD with a compact top navigation bar and prominent Shop, Play, and Classes actions. Dark panels, warm borders, and consistent icons give the interface a cohesive style.",
+        description: "A fantasy HUD with Shop, Play, and Classes right where you'd expect them. Dark panels and warm borders keep the whole interface feeling connected.",
         order: 3,
       },
-      // Add another image's details here, for example:
       // "Shop Menu.png": {
-      //   title: "Simulator shop interface",
-      //   description: "A clear shop layout with easy-to-find upgrades.",
-      //   featured: true,
+      //   title: "Shop menu",
+      //   description: "A quick look at the shop I made for this game.",
       //   order: 4,
       // },
     },
-
     youtube: [
-      // Add a video here, for example:
-      // "* Inventory interaction demo | https://youtu.be/VIDEO_ID",
-      // Or use a full entry:
       // {
       //   url: "https://youtu.be/VIDEO_ID",
-      //   title: "Animated inventory interface",
-      //   description: "A walkthrough of the layout and UI animations.",
-      //   featured: true,
+      //   title: "Inventory animation",
+      //   description: "See the inventory open, close, and react to input.",
+      //   order: 4,
       // },
-    ],
-  },
-
-  scripting: {
-    images: {
-      // Optional details for images added to assets/Scripting/ go here.
-    },
-
-    youtube: [
-      {
-        url: "https://www.youtube.com/watch?v=Wy2rbplQK28",
-        title: "RPG Framework System",
-        description: "A demo of my RPG framework for Roblox Studio.",
-      },
-      {
-        url: "https://www.youtube.com/watch?v=ibiyGn6kSrM",
-        title: "Chest Opening System",
-        description: "A demo of my chest opening system.",
-      },
-      {
-        url: "https://www.youtube.com/watch?v=xjlcl83Fquk",
-        title: "Zombie Game Prototype",
-        description: "A gameplay demo of my zombie game prototype.",
-      },
-      {
-        url: "https://www.youtube.com/watch?v=69UuARjWwTU",
-        title: "Advanced Combat System",
-        description: "A demo of my advanced combat system.",
-      },
-      {
-        url: "https://www.youtube.com/watch?v=c6Qf5GYsLWk",
-        title: "Expert Level Combat System",
-        description: "A demo of my expert level combat system.",
-      },
-      {
-        url: "https://www.youtube.com/watch?v=QFS-k1GwGdM",
-        title: "Advanced Inventory System",
-        description: "",
-      },
-      {
-        url: "https://www.youtube.com/watch?v=o_DEDJtrOkM",
-        title: "Expert Level Movement System",
-        description: "",
-        featured: true,
-      },
     ],
   },
 };

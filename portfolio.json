@@ -4,19 +4,27 @@
       "type": "media",
       "path": "assets/UI/ProfileOverviewUI.png",
       "title": "Player profile & progression",
-      "description": "A bold purple player profile with a clear level and XP hierarchy, player titles, and unlockable banners. A consistent visual language connects the profile overview and customization panels.",
+      "description": "A purple player profile with levels, XP, titles, and unlockable banners. Everything a player needs to show off their progress, in one place.",
       "hidden": false,
       "featured": true,
       "order": 0,
+      "preview": {
+        "small": "assets/previews/ProfileOverviewUI.png-800.webp",
+        "large": "assets/previews/ProfileOverviewUI.png-1600.webp"
+      },
       "slug": "profile-overview"
     },
     {
       "type": "media",
       "path": "assets/UI/Inventory.png",
       "title": "Fantasy inventory & equipment",
-      "description": "A dark fantasy inventory built around readable item categories, an organized item grid, equipment slots, and a separate item details panel. Gold accents make the selected category and equipped item easy to identify.",
+      "description": "A dark fantasy inventory with room for your items, equipment, and the details that matter. Gold accents help you spot what's selected and equipped.",
       "hidden": false,
       "order": 1,
+      "preview": {
+        "small": "assets/previews/Inventory.png-800.webp",
+        "large": "assets/previews/Inventory.png-1600.webp"
+      },
       "slug": "inventory",
       "featured": false
     },
@@ -24,9 +32,13 @@
       "type": "media",
       "path": "assets/UI/SimulatorHudUI.png",
       "title": "Colorful simulator HUD",
-      "description": "A playful simulator interface with distinct currency counters, a level progress bar, and recognizable shortcuts for the shop, pets, rebirths, and codes. Bright icon buttons keep the core actions easy to scan.",
+      "description": "Bright buttons, clear currency counters, and quick access to shops, pets, rebirths, and codes. A playful HUD made for a busy simulator.",
       "hidden": false,
       "order": 2,
+      "preview": {
+        "small": "assets/previews/SimulatorHudUI.png-800.webp",
+        "large": "assets/previews/SimulatorHudUI.png-1600.webp"
+      },
       "slug": "simulator-hud",
       "featured": false
     },
@@ -34,90 +46,15 @@
       "type": "media",
       "path": "assets/UI/HUD.jpg",
       "title": "Fantasy game navigation",
-      "description": "A coordinated fantasy HUD with a compact top navigation bar and prominent Shop, Play, and Classes actions. Dark panels, warm borders, and consistent icons give the interface a cohesive style.",
+      "description": "A fantasy HUD with Shop, Play, and Classes right where you'd expect them. Dark panels and warm borders keep the whole interface feeling connected.",
       "hidden": false,
       "order": 3,
+      "preview": {
+        "small": "assets/previews/HUD.jpg-800.webp",
+        "large": "assets/previews/HUD.jpg-1600.webp"
+      },
       "slug": "game-hud",
       "featured": false
-    }
-  ],
-  "scripting": [
-    {
-      "type": "youtube",
-      "id": "Wy2rbplQK28",
-      "url": "https://www.youtube.com/watch?v=Wy2rbplQK28",
-      "title": "RPG Framework System",
-      "description": "A demo of my RPG framework for Roblox Studio.",
-      "title_source": "custom",
-      "hidden": false,
-      "slug": "rpg-framework",
-      "featured": false
-    },
-    {
-      "type": "youtube",
-      "id": "ibiyGn6kSrM",
-      "url": "https://www.youtube.com/watch?v=ibiyGn6kSrM",
-      "title": "Chest Opening System",
-      "description": "A demo of my chest opening system.",
-      "title_source": "custom",
-      "hidden": false,
-      "slug": "chest-opening",
-      "featured": false
-    },
-    {
-      "type": "youtube",
-      "id": "xjlcl83Fquk",
-      "url": "https://www.youtube.com/watch?v=xjlcl83Fquk",
-      "title": "Zombie Game Prototype",
-      "description": "A gameplay demo of my zombie game prototype.",
-      "title_source": "custom",
-      "hidden": false,
-      "slug": "zombie-game",
-      "featured": false
-    },
-    {
-      "type": "youtube",
-      "id": "69UuARjWwTU",
-      "url": "https://www.youtube.com/watch?v=69UuARjWwTU",
-      "title": "Advanced Combat System",
-      "description": "A demo of my advanced combat system.",
-      "title_source": "custom",
-      "hidden": false,
-      "slug": "advanced-combat",
-      "featured": false
-    },
-    {
-      "type": "youtube",
-      "id": "c6Qf5GYsLWk",
-      "url": "https://www.youtube.com/watch?v=c6Qf5GYsLWk",
-      "title": "Expert Level Combat System",
-      "description": "A demo of my expert level combat system.",
-      "title_source": "custom",
-      "hidden": false,
-      "slug": "expert-combat",
-      "featured": false
-    },
-    {
-      "type": "youtube",
-      "id": "QFS-k1GwGdM",
-      "url": "https://www.youtube.com/watch?v=QFS-k1GwGdM",
-      "title": "Advanced Inventory System",
-      "description": "",
-      "title_source": "custom",
-      "hidden": false,
-      "slug": "QFS-k1GwGdM",
-      "featured": false
-    },
-    {
-      "type": "youtube",
-      "id": "o_DEDJtrOkM",
-      "url": "https://www.youtube.com/watch?v=o_DEDJtrOkM",
-      "title": "Expert Level Movement System",
-      "description": "",
-      "featured": true,
-      "title_source": "custom",
-      "hidden": false,
-      "slug": "o_DEDJtrOkM"
     }
   ]
 }

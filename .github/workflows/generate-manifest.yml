@@ -12,6 +12,7 @@ on:
       - "CNAME"
       - "sitemap.xml"
       - "robots.txt"
+      - "_redirects"
       - ".github/workflows/generate-manifest.yml"
   workflow_dispatch:
 

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://miketherblxdev.github.io/MikeTheRBLX-Portfolio/sitemap.xml

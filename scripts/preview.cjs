@@ -5,9 +5,14 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const PUBLIC_FILES = new Set([
-  'index.html', 'portfolio.html', 'contact.html', 'tos.html',
+  'index.html',
   'styles.css', 'site.js', 'portfolio.js', 'portfolio.json', 'sitemap.xml', 'robots.txt',
 ]);
+const REDIRECTS = {
+  '/portfolio.html': '/?from=work', '/portfolio': '/?from=work',
+  '/contact.html': '/#contact', '/contact': '/#contact',
+  '/tos.html': '/#tos', '/tos': '/#tos',
+};
 const MEDIA_TYPES = {
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif',
   '.webp': 'image/webp', '.svg': 'image/svg+xml', '.avif': 'image/avif',
@@ -28,7 +33,7 @@ function publicPath(requestUrl) {
   if (parts.some(part => !part || part === '.' || part === '..')) return null;
   const relative = parts.join('/');
   if (PUBLIC_FILES.has(relative) || /^google[a-z0-9]+\.html$/i.test(relative)) return relative;
-  if (parts.length >= 3 && parts[0] === 'assets' && ['UI', 'Scripting', 'NormalAssets'].includes(parts[1])
+  if (parts.length >= 3 && parts[0] === 'assets' && ['UI', 'NormalAssets', 'previews'].includes(parts[1])
       && MEDIA_TYPES[path.extname(relative).toLowerCase()]) return relative;
   return null;
 }
@@ -45,6 +50,12 @@ function createServer(root) {
     if (!['GET', 'HEAD'].includes(request.method)) {
       response.setHeader('Allow', 'GET, HEAD');
       fail(405, 'Method not allowed.');
+      return;
+    }
+    const oldPage = (request.url || '/').split(/[?#]/, 1)[0];
+    if (Object.hasOwn(REDIRECTS, oldPage)) {
+      response.writeHead(301, {Location: REDIRECTS[oldPage]});
+      response.end();
       return;
     }
     const relative = publicPath(request.url);

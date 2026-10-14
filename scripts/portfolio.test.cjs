@@ -15,7 +15,7 @@ const VIDEO_A = `https://www.youtube.com/watch?v=${ID_A}`;
 const VIDEO_B = `https://youtu.be/${ID_B}`;
 const REPO = path.resolve(__dirname, '..');
 
-function fixture(t, config = { ui: { images: {}, youtube: [] }, scripting: { images: {}, youtube: [] } }) {
+function fixture(t, config = { ui: { images: {}, youtube: [] } }) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-test-'));
   t.after(() => {
     // Each fixture is a uniquely created child of the OS temporary directory.
@@ -24,7 +24,7 @@ function fixture(t, config = { ui: { images: {}, youtube: [] }, scripting: { ima
       throw new Error('Refusing to clean an unexpected test path.');
     fs.rmSync(target, { recursive: true, force: true });
   });
-  for (const category of ['UI', 'Scripting', 'NormalAssets']) fs.mkdirSync(path.join(root, 'assets', category), { recursive: true });
+  for (const category of ['UI', 'NormalAssets', 'previews']) fs.mkdirSync(path.join(root, 'assets', category), { recursive: true });
   if (config !== null) writeConfig(root, config);
   return root;
 }
@@ -78,8 +78,7 @@ test('invalid video entries fail with their source location', () => {
 
 test('validates optional image fields and video objects', () => {
   assert.doesNotThrow(() => validateConfig({ ui: { images: { 'nested/Shop.png': { title: 'Shop UI',
-    description: '', hidden: false, featured: true, order: 0 } }, youtube: [{ url: VIDEO_A, order: 1000000 }] },
-    scripting: { images: {}, youtube: [] } }));
+    description: '', hidden: false, featured: true, order: 0 } }, youtube: [{ url: VIDEO_A, order: 1000000 }] } }));
 });
 
 test('rejects invalid metadata instead of silently publishing it', () => {
@@ -149,24 +148,34 @@ test('configured videos support strings and descriptions', async t => {
   assert.equal(result.ui[1].id, ID_B);
 });
 
-test('YouTube arrays replace legacy text files, including an empty array', async t => {
-  const root = fixture(t, { ui: { youtube: [] }, scripting: { youtube: [VIDEO_B] } });
-  write(root, 'assets/UI/youtube.txt', VIDEO_A);
-  write(root, 'assets/Scripting/youtube.txt', VIDEO_A);
-  const result = await generate(root, offline);
-  assert.equal(result.ui.length, 0);
-  assert.deepEqual(result.scripting.map(item => item.id), [ID_B]);
+test('only UI work is accepted in the content source', () => {
+  assert.throws(() => validateConfig({ scripting: { youtube: [VIDEO_A] } }), /unknown category/);
 });
 
-test('omitted YouTube lists retain legacy text entry support', async t => {
+test('omitted and empty YouTube lists do not read legacy text files', async t => {
   const root = fixture(t, { ui: { images: {} } });
-  write(root, 'assets/UI/youtube.txt', `# UI videos\n* Inventory UI | ${VIDEO_A}\n${VIDEO_B}\n`);
-  const result = await generate(root, offline);
-  assert.equal(result.ui.length, 2);
-  assert.equal(result.ui[0].title, 'Inventory UI');
-  assert.equal(result.ui[0].featured, true);
+  write(root, 'assets/UI/youtube.txt', `* Legacy demo | ${VIDEO_A}\n`);
+  write(root, 'assets/Scripting/youtube.txt', VIDEO_B);
+  let result = await generate(root, offline);
+  assert.deepEqual(Object.keys(result), ['ui']);
+  assert.equal(result.ui.length, 0);
+  writeConfig(root, { ui: { youtube: [] } });
+  result = await generate(root, offline);
+  assert.equal(result.ui.length, 0);
 });
 
+test('adds responsive previews only when both safe WebP sizes exist', async t => {
+  const root = fixture(t);
+  write(root, 'assets/UI/Shop.png');
+  write(root, 'assets/previews/Shop.png-800.webp');
+  let result = await generate(root, offline);
+  assert.equal(result.ui[0].preview, undefined);
+  write(root, 'assets/previews/Shop.png-1600.webp');
+  result = await generate(root, offline);
+  assert.deepEqual(result.ui[0].preview, {
+    small: 'assets/previews/Shop.png-800.webp', large: 'assets/previews/Shop.png-1600.webp',
+  });
+});
 test('duplicate videos are included once with the first entry metadata', async t => {
   const root = fixture(t, { ui: { youtube: [`First title | ${VIDEO_A}`,
     { url: `https://youtu.be/${ID_A}`, title: 'Second title', featured: true }] } });
@@ -255,33 +264,31 @@ test('adding a similarly named image never changes an existing shared slug', asy
   assert.equal(new Set(after.ui.map(item => item.slug)).size, 2);
 });
 
-test('keeps all eleven current projects and their existing shared slugs during migration', async t => {
+test('preserves the four UI projects and shared slugs when migrating to one page', async t => {
   const root = fixture(t);
   const previous = JSON.parse(fs.readFileSync(path.join(REPO, 'portfolio.json'), 'utf8'));
-  const config = {};
-  for (const category of ['ui', 'scripting']) {
-    config[category] = { images: {}, youtube: [] };
-    for (const item of previous[category]) {
-      const fields = Object.fromEntries(['title', 'description', 'featured', 'hidden', 'order']
-        .filter(field => item[field] !== undefined).map(field => [field, item[field]]));
-      if (item.type === 'media') {
-        write(root, item.path);
-        config[category].images[item.path.split('/').slice(2).join('/')] = fields;
-      } else config[category].youtube.push({ url: item.url, ...fields });
-    }
+  const config = { ui: { images: {}, youtube: [] } };
+  for (const item of previous.ui) {
+    const fields = Object.fromEntries(['title', 'description', 'featured', 'hidden', 'order']
+      .filter(field => item[field] !== undefined).map(field => [field, item[field]]));
+    if (item.type === 'media') {
+      write(root, item.path);
+      config.ui.images[item.path.split('/').slice(2).join('/')] = fields;
+    } else config.ui.youtube.push({ url: item.url, ...fields });
   }
   writeConfig(root, config);
   write(root, 'portfolio.json', JSON.stringify(previous));
   const result = await generate(root, offline);
-  assert.equal(result.ui.length + result.scripting.length, 11);
-  for (const category of ['ui', 'scripting']) for (const item of previous[category]) {
-    const match = result[category].find(candidate => item.type === 'youtube' ? candidate.id === item.id : candidate.path === item.path);
+  assert.deepEqual(Object.keys(result), ['ui']);
+  assert.equal(result.ui.length, 4);
+  assert.deepEqual(result.ui.map(item => item.slug), ['profile-overview', 'inventory', 'simulator-hud', 'game-hud']);
+  for (const item of previous.ui) {
+    const match = result.ui.find(candidate => item.type === 'youtube' ? candidate.id === item.id : candidate.path === item.path);
     assert.ok(match);
     assert.equal(match.slug, item.slug);
     assert.equal(match.title, item.title);
   }
 });
-
 test('fetches missing YouTube titles through the injected lookup and caches fetched titles', async t => {
   const root = fixture(t, { ui: { youtube: [VIDEO_A] } });
   let calls = 0;
@@ -327,7 +334,7 @@ test('a fallback YouTube title is retried on the next online update', async t =>
 
 test('syntax errors leave the previous generated manifest intact', async t => {
   const root = fixture(t);
-  write(root, 'portfolio.json', '{"ui": [], "scripting": []}\n');
+  write(root, 'portfolio.json', '{"ui": []}\n');
   const before = fs.readFileSync(path.join(root, 'portfolio.json'), 'utf8');
   write(root, 'portfolio-content.js', 'module.exports = { ui: BROKEN SYNTAX };');
   await assert.rejects(generate(root, offline), /portfolio-content\.js|syntax|unexpected/i);
@@ -336,7 +343,7 @@ test('syntax errors leave the previous generated manifest intact', async t => {
 
 test('invalid metadata leaves the previous generated manifest intact', async t => {
   const root = fixture(t, { ui: { images: { 'Shop.png': { hidden: 'yes' } } } });
-  write(root, 'portfolio.json', '{"ui": [], "scripting": []}\n');
+  write(root, 'portfolio.json', '{"ui": []}\n');
   const before = fs.readFileSync(path.join(root, 'portfolio.json'), 'utf8');
   await assert.rejects(generate(root, offline));
   assert.equal(fs.readFileSync(path.join(root, 'portfolio.json'), 'utf8'), before);
@@ -344,18 +351,21 @@ test('invalid metadata leaves the previous generated manifest intact', async t =
 
 test('build includes website files and media while excluding authoring, backend and repository files', async t => {
   const root = fixture(t, { ui: { images: { 'Shop.png': { title: 'Shop', description: 'A clear layout.' } }, youtube: [] } });
-  for (const filename of ['index.html', 'portfolio.html', 'contact.html', 'tos.html', 'styles.css', 'site.js', 'portfolio.js', 'sitemap.xml'])
+  for (const filename of ['index.html', 'portfolio.html', 'contact.html', 'tos.html', 'styles.css', 'site.js', 'portfolio.js', 'sitemap.xml', 'robots.txt', '_redirects', 'CNAME'])
     write(root, filename, `public ${filename}`);
   write(root, 'assets/UI/Shop.png');
   write(root, 'assets/NormalAssets/logo.webp');
+  write(root, 'assets/previews/Shop.png-800.webp');
+  write(root, 'assets/previews/Shop.png-1600.webp');
+  write(root, 'assets/Scripting/private.png');
   for (const filename of ['admin/worker.mjs', 'admin/.dev.vars', '.git/config', 'assets/UI/youtube.txt',
     'assets/UI/Shop.png.json', 'project-details.json', 'README.md', '.env', 'scripts/private.cjs']) write(root, filename, 'private');
   await build(root, offline);
   const output = path.join(root, '_site');
-  for (const filename of ['index.html', 'portfolio.json', 'assets/UI/Shop.png', 'assets/NormalAssets/logo.webp'])
+  for (const filename of ['index.html', 'portfolio.json', 'assets/UI/Shop.png', 'assets/NormalAssets/logo.webp', 'assets/previews/Shop.png-800.webp', '_redirects', 'CNAME'])
     assert.ok(fs.existsSync(path.join(output, ...filename.split('/'))), filename);
   for (const filename of ['portfolio-content.js', 'admin', '.git', '.env', 'project-details.json', 'README.md',
-    'scripts', 'assets/UI/youtube.txt', 'assets/UI/Shop.png.json'])
+    'scripts', 'portfolio.html', 'contact.html', 'tos.html', 'assets/Scripting', 'assets/UI/youtube.txt', 'assets/UI/Shop.png.json'])
     assert.equal(fs.existsSync(path.join(output, ...filename.split('/'))), false, filename);
   assert.equal(JSON.parse(fs.readFileSync(path.join(output, 'portfolio.json'))).ui[0].description, 'A clear layout.');
 });
@@ -418,11 +428,13 @@ async function request(server, url, method = 'GET', headers = {}) {
 async function previewFixture(t) {
   const root = fixture(t);
   write(root, 'index.html', 'Public homepage');
-  write(root, 'portfolio.json', '{"ui":[],"scripting":[]}');
+  write(root, 'portfolio.json', '{"ui":[]}');
   write(root, 'assets/UI/Inventory UI.png', 'image bytes');
   write(root, '.git/config', 'private git content');
   write(root, 'admin/worker.mjs', 'backend source');
   write(root, 'assets/UI/youtube.txt', 'private authoring text');
+  write(root, 'assets/Scripting/private.png', 'private scripting work');
+  write(root, 'assets/previews/Inventory.png-800.webp', 'preview bytes');
   const server = createServer(root);
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   t.after(() => new Promise(resolve => server.close(resolve)));
@@ -448,7 +460,7 @@ test('preview serves the homepage, JSON and encoded image paths with correct con
 test('preview rejects backend, repository, authoring, directory listings and traversal requests', async t => {
   const { server } = await previewFixture(t);
   for (const url of ['/admin/worker.mjs', '/.git/config', '/portfolio-content.js', '/assets/UI/youtube.txt',
-    '/assets/UI/', '/../.git/config', '/assets/UI/%2e%2e/%2e%2e/.git/config', '/assets%5cUI%5cInventory%20UI.png',
+    '/assets/Scripting/private.png', '/assets/UI/', '/../.git/config', '/assets/UI/%2e%2e/%2e%2e/.git/config', '/assets%5cUI%5cInventory%20UI.png',
     '/%ZZ', '/assets/UI/%00.png', '//index.html']) {
     const result = await request(server, url);
     assert.equal(result.status, 404, url);
@@ -477,4 +489,57 @@ test('preview never follows asset symlinks to private source files', async t => 
   try { fs.symlinkSync(source, link, process.platform === 'win32' ? 'junction' : 'dir'); }
   catch (error) { if (['EPERM', 'EACCES', 'ENOSYS'].includes(error.code)) { t.skip('This environment cannot create directory links.'); return; } throw error; }
   assert.equal((await request(server, '/assets/UI/linked/Private.png')).status, 404);
+});
+
+test('preview redirects old page URLs to single-page sections', async t => {
+  const { server } = await previewFixture(t);
+  for (const [page, target] of [['portfolio', '/?from=work'], ['contact', '/#contact'], ['tos', '/#tos']]) {
+    for (const suffix of ['', '.html']) {
+      const response = await request(server, `/${page}${suffix}?old=1`);
+      assert.equal(response.status, 301);
+      assert.equal(response.headers.location, target);
+      assert.equal(response.body, '');
+    }
+  }
+});
+
+test('preview serves optimized WebP files without exposing content source', async t => {
+  const { server } = await previewFixture(t);
+  const response = await request(server, '/assets/previews/Inventory.png-800.webp');
+  assert.equal(response.status, 200);
+  assert.equal(response.headers['content-type'], 'image/webp');
+  assert.equal(response.body, 'preview bytes');
+});
+test('identical content updates leave the existing manifest file untouched', async t => {
+  const root = fixture(t);
+  write(root, 'assets/UI/Shop.png');
+  await generate(root, offline);
+  const manifestPath = path.join(root, 'portfolio.json');
+  const olderTime = new Date('2024-01-01T00:00:00Z');
+  fs.utimesSync(manifestPath, olderTime, olderTime);
+  const previousTime = fs.statSync(manifestPath).mtimeMs;
+  await generate(root, offline);
+  assert.equal(fs.statSync(manifestPath).mtimeMs, previousTime);
+});
+
+test('transient destination locks are retried without removing the previous manifest', async t => {
+  const root = fixture(t);
+  write(root, 'portfolio.json', '{"ui":[]}\n');
+  write(root, 'assets/UI/Shop.png');
+  const previous = fs.readFileSync(path.join(root, 'portfolio.json'), 'utf8');
+  const originalRename = fs.promises.rename;
+  let attempts = 0;
+  fs.promises.rename = async (source, target) => {
+    if (target === path.join(root, 'portfolio.json') && ++attempts <= 2) {
+      assert.equal(fs.readFileSync(target, 'utf8'), previous);
+      const failure = new Error('Temporary sync lock'); failure.code = 'EPERM'; throw failure;
+    }
+    return originalRename(source, target);
+  };
+  try {
+    const result = await generate(root, offline);
+    assert.equal(attempts, 3);
+    assert.equal(result.ui.length, 1);
+    assert.equal(readManifest(root).ui.length, 1);
+  } finally { fs.promises.rename = originalRename; }
 });
